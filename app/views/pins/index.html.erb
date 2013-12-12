@@ -5,7 +5,7 @@
         <%= link_to image_tag(pin.image.url(:medium)), pin %>
         <div class="panel-body">
           <p><%= pin.description %></p>
-          <p><strong><%= pin.user.email %></strong></p>
+          <p><strong><%= pin.user.name if pin.user %></strong></p>
           <% if user_signed_in? && pin.user == current_user %>
           <div class="action">
             <%= link_to edit_pin_path(pin) do %>
@@ -21,6 +21,10 @@
         </div>
       </div>
     <% end %>
+</div>
+
+<div class="center">
+<%= will_paginate @pins %>
 </div>
 
   
