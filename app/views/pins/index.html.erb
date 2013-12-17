@@ -19,8 +19,11 @@
           </div>
           <% end %>
         </div>
-      </div>
-    <% end %>
+      <% if pin.comments.size!=0 %>
+        <%= render pin.comments %>
+      <% end %>
+    </div>
+  <% end %>
 </div>
 
 <div class="center">

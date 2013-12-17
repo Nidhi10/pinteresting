@@ -1,0 +1,17 @@
+ <div class="panel panel-default">
+    <div class="panel-heading center">
+      <strong>Comments<strong>
+    </div>
+    <div class="list-group-item">
+        <%= comment.user.name if comment.user %>:     
+        <em><%= comment.content %></em>    
+        <% if comment.user==current_user %>
+          <div class="right">
+            <%= link_to pin_comment_path(comment.pin,comment), method: :delete, data: { confirm: 'Are you sure?' } do%>
+            <span class="glyphicon glyphicon-trash"></span>
+                Delete Comment
+            <% end %>
+          </div>
+        <% end %>
+    </div>
+  </div>

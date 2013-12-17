@@ -11,7 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131212104455) do
+ActiveRecord::Schema.define(version: 20131216202755) do
+
+  create_table "comments", force: true do |t|
+    t.string   "content"
+    t.integer  "user_id"
+    t.integer  "pin_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "comment"
+    t.integer  "points",     default: 0
+  end
+
+  add_index "comments", ["pin_id"], name: "index_comments_on_pin_id"
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id"
 
   create_table "pins", force: true do |t|
     t.string   "description"
@@ -22,6 +35,8 @@ ActiveRecord::Schema.define(version: 20131212104455) do
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
+    t.integer  "pin",                limit: 255, default: 0
+    t.integer  "points",                         default: 0
   end
 
   add_index "pins", ["user_id"], name: "index_pins_on_user_id"
@@ -44,5 +59,19 @@ ActiveRecord::Schema.define(version: 20131212104455) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+
+  create_table "votes", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
+    t.integer  "pin_id"
+    t.integer  "voteable_id"
+    t.string   "voteable_type"
+    t.integer  "vote",          default: 0
+  end
+
+  add_index "votes", ["pin_id"], name: "index_votes_on_pin_id"
+  add_index "votes", ["user_id", "voteable_id"], name: "index_votes_on_user_id_and_voteable_id", unique: true
+  add_index "votes", ["user_id"], name: "index_votes_on_user_id"
 
 end
