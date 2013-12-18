@@ -11,19 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131216202755) do
+ActiveRecord::Schema.define(version: 20131217152322) do
 
   create_table "comments", force: true do |t|
     t.string   "content"
     t.integer  "user_id"
-    t.integer  "pin_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "comment"
-    t.integer  "points",     default: 0
+    t.integer  "points",           default: 0
+    t.integer  "commentable_id"
+    t.string   "commentable_type"
+    t.integer  "parent_id"
   end
 
-  add_index "comments", ["pin_id"], name: "index_comments_on_pin_id"
   add_index "comments", ["user_id"], name: "index_comments_on_user_id"
 
   create_table "pins", force: true do |t|
@@ -71,7 +72,7 @@ ActiveRecord::Schema.define(version: 20131216202755) do
   end
 
   add_index "votes", ["pin_id"], name: "index_votes_on_pin_id"
-  add_index "votes", ["user_id", "voteable_id"], name: "index_votes_on_user_id_and_voteable_id", unique: true
+  add_index "votes", ["user_id", "voteable_id", "voteable_type"], name: "index_votes_on_user_id_and_voteable_id_and_voteable_type", unique: true
   add_index "votes", ["user_id"], name: "index_votes_on_user_id"
 
 end

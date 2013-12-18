@@ -5,21 +5,28 @@ class Vote < ActiveRecord::Base
 	before_destroy :unvote_points
 
 	def vote_points
-		@pin=Pin.find(self.voteable_id)
-
+		if self.voteable_type=="Pin"
+			@voteable=Pin.find(self.voteable_id)
+		elsif self.voteable_type="Comment"
+			@voteable=Comment.find(self.voteable_id)
+		end
 		if self.vote==1
-			@pin.increment! :points, 1
+			@voteable.increment! :points, 1
 		elsif self.vote==-1
-			@pin.decrement! :points,1
+			@voteable.decrement! :points,1
 		end
 	end
 
 	def unvote_points
-		@pin=Pin.find(self.voteable_id)
+		if self.voteable_type=="Pin"
+			@voteable=Pin.find(self.voteable_id)
+		elsif self.voteable_type=="Comment"
+			@voteable=Comment.find(self.voteable_id)
+		end
 		if self.vote==1
-			@pin.decrement! :points,1
+			@voteable.decrement! :points,1
 		elsif self.vote==-1
-			@pin.increment! :points,1
+			@voteable.increment! :points,1
 		end
 	end
 

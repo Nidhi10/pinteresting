@@ -4,15 +4,16 @@ Pinteresting::Application.routes.draw do
   get "votes/create"
   resources :pins do
     resources :comments
-    get 'unvote' =>'votes#unvote', on: :member
-    get 'upvote' =>'votes#upvote', on: :member
-    get 'downvote' =>'votes#downvote', on: :member
+    get 'unvote' =>'votes#unvote_pin', on: :member
+    get 'upvote' =>'votes#upvote_pin', on: :member
+    get 'downvote' =>'votes#downvote_pin', on: :member
   end
 
   resources :comments do
-  get 'unvote' =>'votes#unvote', on: :member
-  get 'upvote' =>'votes#upvote', on: :member
-  get 'downvote' =>'votes#downvote', on: :member
+    resources :comments, only: [:create, :destroy]
+  get 'unvote' =>'votes#unvote_comment', on: :member
+  get 'upvote' =>'votes#upvote_comment', on: :member
+  get 'downvote' =>'votes#downvote_comment', on: :member
   end
 
   devise_for :users

@@ -18,7 +18,29 @@
             <% end %>
           </div>
           <% end %>
+          <span class="color">Votes :<%= pin.points %></span>
+            <% if user_signed_in? %>
+              <% if pin.votes.where(user_id:current_user.id,vote:1).exists? %>
+                |<%= link_to unvote_pin_path(pin) do %>
+                        <span class="glyphicon glyphicon-thumbs-down"></span>
+                      <% end %>
+              <% elsif pin.votes.where(user_id:current_user.id,vote:-1).exists?%>
+                <%= link_to unvote_pin_path(pin) do %>
+                  <span class="glyphicon glyphicon-thumbs-up"></span>
+                      <% end %>
+                  <% else %>
+                <%= link_to upvote_pin_path(pin) do %>
+                  <span class="glyphicon glyphicon-thumbs-up"></span>
+                      <% end %>|
+                <%= link_to downvote_pin_path(pin) do %>
+                  <span class="glyphicon glyphicon-thumbs-down"></span>
+                      <% end %>
+              <% end %>
+            <% end %>
         </div>
+    <div class="panel-heading center">
+      <strong>Comments<strong>
+    </div>
       <% if pin.comments.size!=0 %>
         <%= render pin.comments %>
       <% end %>

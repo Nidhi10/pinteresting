@@ -1,17 +1,48 @@
  <div class="panel panel-default">
-    <div class="panel-heading center">
-      <strong>Comments<strong>
-    </div>
     <div class="list-group-item">
         <%= comment.user.name if comment.user %>:     
         <em><%= comment.content %></em>    
-        <% if comment.user==current_user %>
+        <% if (comment.user==current_user && comment.commentable_type=="Pin" )%>
           <div class="right">
-            <%= link_to pin_comment_path(comment.pin,comment), method: :delete, data: { confirm: 'Are you sure?' } do%>
+            <%= link_to pin_comment_path(comment.commentable_id,comment), method: :delete, data: { confirm: 'Are you sure?' } do%>
             <span class="glyphicon glyphicon-trash"></span>
                 Delete Comment
             <% end %>
           </div>
+          <% elsif (comment.user==current_user && comment.commentable_type=="Comment") %>
+          <div class="right">
+            <%= link_to comment_comment_path(comment.commentable_id,comment), method: :delete, data: { confirm: 'Are you sure?' } do%>
+            <span class="glyphicon glyphicon-trash"></span>
+                Delete Comment2
+            <% end %>
+          </div>
         <% end %>
+        <div>
+        <span class="color">Votes :<%= comment.points %></span>
+      <% if user_signed_in? %>
+        <% if comment.votes.where(user_id:current_user.id,vote:1).exists? %>
+          |<%= link_to unvote_comment_path(comment) do %>
+          <span class="glyphicon glyphicon-thumbs-down"></span>
+            <% end %>
+        <% elsif comment.votes.where(user_id:current_user.id,vote:-1).exists?%>
+          <%= link_to unvote_comment_path(comment) do%>
+          <span class="glyphicon glyphicon-thumbs-up"></span>
+            <% end %>
+        <% else %>
+          <%= link_to upvote_comment_path(comment) do%>
+          <span class="glyphicon glyphicon-thumbs-up"></span>
+            <% end %>|
+          <%= link_to downvote_comment_path(comment) do %>
+          <span class="glyphicon glyphicon-thumbs-down"></span>
+            <% end %>
+        <% end %>
+      <% if comment.comments.exists? %>
+          <%= render comment.comments %>
+      <% end %>
+      <% @comment=comment %>
+      <%= render 'comments/form' %>
+        
+    <% end %>
+  </div>  
     </div>
   </div>

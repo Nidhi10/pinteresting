@@ -1,4 +1,5 @@
 <div class="panel panel-default">
+	<%= link_to 'Back', pins_path %>
 	<div class="panel-heading center">
 	  <%= image_tag @pin.image.url(:medium) %>
 	</div>
@@ -6,32 +7,40 @@
 	  <p><%= @pin.description %></p>
 	  <p><strong><%= @pin.user.name if @pin.user %></strong></p>
 	</div>
-
-	<div class="panel-footer">
+	<div class="right">
 		<% if user_signed_in? && @pin.user == current_user %>
 			<%= link_to edit_pin_path(@pin) do %>
-              <span class="glyphicon glyphicon-edit"></span>
-              Edit
-            <% end %> |
-         	<%= link_to @pin, method: :delete, data: { confirm: 'Are you sure?' } do%>
-              <span class="glyphicon glyphicon-trash"></span>
-              Delete
-            <% end %>|
+	      <span class="glyphicon glyphicon-edit"></span>
+	        Edit
+	    <% end %> |
+	    <%= link_to @pin, method: :delete, data: { confirm: 'Are you sure?' } do%>
+	      <span class="glyphicon glyphicon-trash"></span>
+	        Delete
+	    <% end %>
 		<% end %>
-		<%= link_to 'Back', pins_path %>
-		<%=@pin.points %>
-		<% if user_signed_in? %>
-			<% if @pin.votes.where(user_id:current_user.id,vote:1).exists? %>
-			<%= link_to 'Unlike', unvote_pin_path(@pin) %>
-			<% elsif @pin.votes.where(user_id:current_user.id,vote:-1).exists?%>
-			<%= link_to 'UnDislike', unvote_pin_path(@pin) %>
-			<% else %>
-			<%= link_to 'Like', upvote_pin_path(@pin) %>
-			<%= link_to 'Dislike', downvote_pin_path(@pin) %>
-			<% end %>
-			
-		<% end %>			
 	</div>
+	<span class="color">Votes :<%= @pin.points %></span>
+	<% if user_signed_in? %>
+		<% if @pin.votes.where(user_id:current_user.id,vote:1).exists? %>
+			|<%= link_to unvote_pin_path(@pin) do %>
+        <span class="glyphicon glyphicon-thumbs-down"></span>
+	    <% end %>
+		<% elsif @pin.votes.where(user_id:current_user.id,vote:-1).exists?%>
+			|<%= link_to unvote_pin_path(@pin) do %>
+				<span class="glyphicon glyphicon-thumbs-up"></span>
+      <% end %>
+    <% else %>
+			<%= link_to upvote_pin_path(@pin) do %>
+				<span class="glyphicon glyphicon-thumbs-up"></span>
+      <% end %>|
+			<%= link_to downvote_pin_path(@pin) do %>
+				<span class="glyphicon glyphicon-thumbs-down"></span>
+      <% end %>
+		<% end %>
+	<% end %>			
+	<div class="panel-heading center">
+    <strong>Comments<strong>
+  </div>
 	<% if @pin.comments.size!=0 %>
 		<%= render @pin.comments %>
 	<% end %>
